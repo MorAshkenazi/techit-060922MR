@@ -1,9 +1,11 @@
 import { FunctionComponent } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { successMsg } from "../services/feedbacks";
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
+  let navigate = useNavigate();
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -45,7 +47,16 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               </li>
             </ul>
             <form className="d-flex" role="search">
-              <button className="btn btn-outline-info">Logout</button>
+              <button
+                className="btn btn-outline-info"
+                onClick={() => {
+                  navigate("/");
+                  sessionStorage.removeItem("userData");
+                  successMsg("Bye Bye :)");
+                }}
+              >
+                Logout
+              </button>
             </form>
           </div>
         </div>

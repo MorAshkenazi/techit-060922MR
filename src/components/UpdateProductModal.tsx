@@ -1,16 +1,18 @@
 import { FunctionComponent } from "react";
 import { Modal } from "react-bootstrap";
-import AddProduct from "./AddProduct";
+import UpdateProduct from "./UpdateProduct";
 
-interface AddProductModalProps {
+interface UpdateProductModalProps {
   show: boolean;
   onHide: Function;
+  productId: number;
   refresh: Function;
 }
 
-const AddProductModal: FunctionComponent<AddProductModalProps> = ({
+const UpdateProductModal: FunctionComponent<UpdateProductModalProps> = ({
   show,
   onHide,
+  productId,
   refresh,
 }) => {
   return (
@@ -24,11 +26,15 @@ const AddProductModal: FunctionComponent<AddProductModalProps> = ({
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            ADD PRODUCT
+            UPDATE PRODUCT
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddProduct onHide={() => onHide()} refresh={refresh} />
+          <UpdateProduct
+            onHide={() => onHide()}
+            productId={productId}
+            refresh={refresh}
+          />
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
@@ -36,4 +42,4 @@ const AddProductModal: FunctionComponent<AddProductModalProps> = ({
   );
 };
 
-export default AddProductModal;
+export default UpdateProductModal;

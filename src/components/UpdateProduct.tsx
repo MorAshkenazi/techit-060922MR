@@ -1,27 +1,37 @@
 import { useFormik } from "formik";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import * as yup from "yup";
+import { getProductById, updateProduct } from "../services/productsService";
 import Product from "../interfaces/Product";
-import { addProduct } from "../services/productsService";
 import { successMsg } from "../services/feedbacks";
 
-interface AddProductProps {
+interface UpdateProductProps {
   onHide: Function;
+  productId: number;
   refresh: Function;
 }
 
-const AddProduct: FunctionComponent<AddProductProps> = ({
+const UpdateProduct: FunctionComponent<UpdateProductProps> = ({
   onHide,
+  productId,
   refresh,
 }) => {
+  let [product, setProduct] = useState<Product>({
+    name: "",
+    price: 0,
+    category: "",
+    description: "",
+    image: "",
+  });
   let formik = useFormik({
     initialValues: {
-      name: "",
-      price: 0,
-      category: "",
-      description: "",
-      image: "",
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      description: product.description,
+      image: product.image,
     },
+    enableReinitialize: true,
     validationSchema: yup.object({
       name: yup.string().required().min(2),
       price: yup.number().required().min(0),
@@ -30,10 +40,10 @@ const AddProduct: FunctionComponent<AddProductProps> = ({
       image: yup.string().required().min(2),
     }),
     onSubmit: (values: Product) => {
-      addProduct(values)
+      updateProduct({ ...values, id: productId })
         .then(() => {
           onHide();
-          successMsg("Product added successfully!");
+          successMsg("Product updated successfully!");
           refresh();
         })
         .catch((err) => console.log(err));
@@ -41,7 +51,9 @@ const AddProduct: FunctionComponent<AddProductProps> = ({
   });
 
   useEffect(() => {
-    formik.setFieldValue("price", "");
+    getProductById(productId)
+      .then((res) => setProduct(res.data))
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -132,11 +144,11 @@ const AddProduct: FunctionComponent<AddProductProps> = ({
           className="btn btn-success w-100 my-3"
           disabled={!formik.dirty || !formik.isValid}
         >
-          Add
+          Update
         </button>
       </form>
     </div>
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

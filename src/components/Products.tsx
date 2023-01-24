@@ -3,6 +3,10 @@ import Product from "../interfaces/Product";
 import { getProducts } from "../services/productsService";
 import Navbar from "./Navbar";
 import AddProductModal from "./AddProductModal";
+import UpdateProductModal from "./UpdateProductModal";
+import DeleteProductModal from "./DeleteProductModal";
+import { addProductToCart } from "../services/cartsService";
+import { successMsg } from "../services/feedbacks";
 
 interface ProductsProps {}
 
@@ -13,15 +17,23 @@ const Products: FunctionComponent<ProductsProps> = () => {
       ? true
       : false;
   let [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  let [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
+  let [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  let [productId, setProductId] = useState<number>(0);
+  let [productsChange, setProductsChange] = useState<boolean>(false);
 
   useEffect(() => {
     getProducts()
       .then((res) => setProducts(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [productsChange]);
 
   let handleAddProduct = () => {
     setOpenAddModal(true);
+  };
+
+  let refresh = () => {
+    setProductsChange(!productsChange);
   };
 
   return (
@@ -53,15 +65,36 @@ const Products: FunctionComponent<ProductsProps> = () => {
                   <h5 className="card-title">{product.name}</h5>
                   <p className="card-text">{product.description}</p>
                   <p className="text-success">{product.price}₪</p>
-                  <button className="btn btn-primary">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      addProductToCart(product.id as number)
+                        .then(() =>
+                          successMsg(`Product ${product.name} added to cart`)
+                        )
+                        .catch((err) => console.log(err));
+                    }}
+                  >
                     <i className="fa-solid fa-cart-plus"></i> Add to cart
                   </button>
                   {isAdmin && (
                     <>
-                      <button className="btn btn-warning mx-2">
+                      <button
+                        className="btn btn-warning mx-2"
+                        onClick={() => {
+                          setOpenUpdateModal(true);
+                          setProductId(product.id as number);
+                        }}
+                      >
                         <i className="fa-solid fa-pen-to-square"></i>
                       </button>
-                      <button className="btn btn-danger">
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                          setOpenDeleteModal(true);
+                          setProductId(product.id as number);
+                        }}
+                      >
                         <i className="fa-solid fa-trash"></i>
                       </button>
                     </>
@@ -77,6 +110,19 @@ const Products: FunctionComponent<ProductsProps> = () => {
       <AddProductModal
         show={openAddModal}
         onHide={() => setOpenAddModal(false)}
+        refresh={refresh}
+      />
+      <UpdateProductModal
+        show={openUpdateModal}
+        onHide={() => setOpenUpdateModal(false)}
+        productId={productId}
+        refresh={refresh}
+      />
+      <DeleteProductModal
+        show={openDeleteModal}
+        onHide={() => setOpenDeleteModal(false)}
+        productId={productId}
+        refresh={refresh}
       />
     </>
   );

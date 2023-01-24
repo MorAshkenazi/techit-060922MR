@@ -5,6 +5,7 @@ import * as yup from "yup";
 import User from "../interfaces/User";
 import { addUser } from "../services/usersService";
 import { successMsg } from "../services/feedbacks";
+import { createCart } from "../services/cartsService";
 
 interface RegisterProps {}
 
@@ -19,17 +20,26 @@ const Register: FunctionComponent<RegisterProps> = () => {
     }),
     onSubmit: (values: User) => {
       addUser({ ...values, isAdmin: false })
-        .then(() => {
+        .then((res) => {
+          createUserCart(res.data.id);
           navigate("/home");
           sessionStorage.setItem(
             "userData",
-            JSON.stringify({ isLoggedIn: true, isAdmin: false })
+            JSON.stringify({
+              isLoggedIn: true,
+              isAdmin: false,
+              userId: res.data.id,
+            })
           );
           successMsg("You registered successfully!");
         })
         .catch((err) => console.log(err));
     },
   });
+
+  let createUserCart = (userId: number) => {
+    createCart(userId).catch((err) => console.log(err));
+  };
   return (
     <div className="container mt-3 col-md-4 text-center">
       <h3 className="display-3">REGISTER</h3>

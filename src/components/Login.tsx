@@ -23,7 +23,11 @@ const Login: FunctionComponent<LoginProps> = () => {
             navigate("/home");
             sessionStorage.setItem(
               "userData",
-              JSON.stringify({ isLoggedIn: true, isAdmin: res.data[0].isAdmin })
+              JSON.stringify({
+                isLoggedIn: true,
+                isAdmin: res.data[0].isAdmin,
+                userId: res.data[0].id,
+              })
             );
             successMsg("You logged in successfully!");
           } else errorMsg("Wrong email or password");
