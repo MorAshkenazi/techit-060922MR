@@ -36,17 +36,27 @@ export async function getProductsInCart() {
       sessionStorage.getItem("userData") as string
     ).userId;
 
-    let products: Product[] = [];
     // get user cart (response object) according to his userId
-    let cartRes = await axios.get(`${api}?userId=${userId}`);
+    let cartRes = await axios.get(
+      `${process.env.REACT_APP_API}/carts?userId=${userId}`
+    );
     // get user cart (products numbers array)
     let productsIds: number[] = cartRes.data[0].products;
-    for (let id of productsIds) {
-      let productRes = await axios.get(`http://localhost:8000/products/${id}`);
-      products.push(productRes.data);
-    }
+
+    // wait for all products promises
+    const promiseArr = await Promise.all(
+      productsIds.map((id) =>
+        axios.get(`${process.env.REACT_APP_API}/products/${id}`)
+      )
+    );
+
+    // get array of data only
+    let products: Product[] = promiseArr.map((res) => res.data);
+    console.log(products);
+
     return products;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }

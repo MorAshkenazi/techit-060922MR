@@ -1,7 +1,8 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, SetStateAction, useEffect, useState } from "react";
 import Product from "../interfaces/Product";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { getProductsInCart } from "../services/cartsService";
 
 interface CartProps {}
 
@@ -9,8 +10,47 @@ const Cart: FunctionComponent<CartProps> = () => {
   let [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    getProducts();
+    // getProducts2();
+    (async () => {
+      try {
+        const products = await getProductsInCart();
+        setProducts(products);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, []);
+
+  let getProducts2 = async () => {
+    try {
+      // get userId from sessionStorage
+      let userId: number = JSON.parse(
+        sessionStorage.getItem("userData") as string
+      ).userId;
+
+      // get user cart (response object) according to his userId
+      let cartRes = await axios.get(
+        `${process.env.REACT_APP_API}/carts?userId=${userId}`
+      );
+      // get user cart (products numbers array)
+      let productsIds: number[] = cartRes.data[0].products;
+
+      // wait for all products promises
+      const promiseArr = await Promise.all(
+        productsIds.map((id) =>
+          axios.get(`${process.env.REACT_APP_API}/products/${id}`)
+        )
+      );
+
+      // get array of data only
+      let products: Product[] = promiseArr.map((res) => res.data);
+      console.log(products);
+
+      setProducts(products);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   let getProducts = async () => {
     try {
