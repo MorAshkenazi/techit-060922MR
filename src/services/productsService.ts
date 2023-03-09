@@ -5,7 +5,12 @@ const api: string = process.env.REACT_APP_API + "/products" || "";
 
 // get all products
 export function getProducts() {
-  return axios.get(api);
+  return axios.get(api, {
+    headers: {
+      Authorization: JSON.parse(sessionStorage.getItem("userData") as string)
+        .token,
+    },
+  });
 }
 
 // get specific product
@@ -20,7 +25,7 @@ export function addProduct(productToAdd: Product) {
 
 // update product (includes id field)
 export function updateProduct(newProduct: Product) {
-  return axios.put(`${api}/${newProduct.id}`, newProduct);
+  return axios.put(`${api}/${newProduct._id}`, newProduct);
 }
 
 // delete product

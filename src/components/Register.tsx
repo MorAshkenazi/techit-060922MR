@@ -21,14 +21,12 @@ const Register: FunctionComponent<RegisterProps> = () => {
     onSubmit: (values: User) => {
       addUser({ ...values, isAdmin: false })
         .then((res) => {
-          createUserCart(res.data.id);
           navigate("/home");
           sessionStorage.setItem(
             "userData",
             JSON.stringify({
               isLoggedIn: true,
-              isAdmin: false,
-              userId: res.data.id,
+              token: res.data,
             })
           );
           successMsg("You registered successfully!");
@@ -37,9 +35,6 @@ const Register: FunctionComponent<RegisterProps> = () => {
     },
   });
 
-  let createUserCart = (userId: string) => {
-    createCart(userId).catch((err) => console.log(err));
-  };
   return (
     <div className="container mt-3 col-md-4 text-center">
       <h3 className="display-3">REGISTER</h3>

@@ -40,7 +40,7 @@ const UpdateProduct: FunctionComponent<UpdateProductProps> = ({
       image: yup.string().required().min(2),
     }),
     onSubmit: (values: Product) => {
-      updateProduct({ ...values, id: productId })
+      updateProduct({ ...values, _id: productId })
         .then(() => {
           onHide();
           successMsg("Product updated successfully!");

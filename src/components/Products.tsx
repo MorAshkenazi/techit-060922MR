@@ -7,15 +7,13 @@ import UpdateProductModal from "./UpdateProductModal";
 import DeleteProductModal from "./DeleteProductModal";
 // import { addProductToCart } from "../services/cartsService";
 import { successMsg } from "../services/feedbacks";
+import { getIsAdmin } from "../services/usersService";
 
 interface ProductsProps {}
 
 const Products: FunctionComponent<ProductsProps> = () => {
   let [products, setProducts] = useState<Product[]>([]);
-  let isAdmin: boolean =
-    JSON.parse(sessionStorage.getItem("userData") as string).isAdmin == true
-      ? true
-      : false;
+  let isAdmin: boolean = getIsAdmin() == true ? true : false;
   let [openAddModal, setOpenAddModal] = useState<boolean>(false);
   let [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
   let [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -50,7 +48,7 @@ const Products: FunctionComponent<ProductsProps> = () => {
           <div className="row">
             {products.map((product: Product) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="card ms-1 col-md-4"
                 style={{ width: "18rem" }}
               >
@@ -83,7 +81,7 @@ const Products: FunctionComponent<ProductsProps> = () => {
                         className="btn btn-warning mx-2"
                         onClick={() => {
                           setOpenUpdateModal(true);
-                          setProductId(product.id as string);
+                          setProductId(product._id as string);
                         }}
                       >
                         <i className="fa-solid fa-pen-to-square"></i>
@@ -92,7 +90,7 @@ const Products: FunctionComponent<ProductsProps> = () => {
                         className="btn btn-danger"
                         onClick={() => {
                           setOpenDeleteModal(true);
-                          setProductId(product.id as string);
+                          setProductId(product._id as string);
                         }}
                       >
                         <i className="fa-solid fa-trash"></i>

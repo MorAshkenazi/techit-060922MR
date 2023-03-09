@@ -19,20 +19,20 @@ const Login: FunctionComponent<LoginProps> = () => {
     onSubmit: (values: User) => {
       checkUser(values)
         .then((res) => {
-          if (res.data.length) {
-            navigate("/home");
-            sessionStorage.setItem(
-              "userData",
-              JSON.stringify({
-                isLoggedIn: true,
-                isAdmin: res.data[0].isAdmin,
-                userId: res.data[0].id,
-              })
-            );
-            successMsg("You logged in successfully!");
-          } else errorMsg("Wrong email or password");
+          navigate("/home");
+          successMsg("You logged in successfully!");
+          sessionStorage.setItem(
+            "userData",
+            JSON.stringify({
+              isLoggedIn: true,
+              token: res.data,
+            })
+          );
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          errorMsg("Wrong email or password");
+        });
     },
   });
   return (

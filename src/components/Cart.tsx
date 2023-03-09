@@ -94,7 +94,7 @@ const Cart: FunctionComponent<CartProps> = () => {
             </thead>
             <tbody>
               {products.map((product: Product) => (
-                <tr key={product.id}>
+                <tr key={product._id}>
                   <td>{product.name}</td>
                   <td>{product.category}</td>
                   <td>{product.price}</td>
