@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import AddProductModal from "./AddProductModal";
 import UpdateProductModal from "./UpdateProductModal";
 import DeleteProductModal from "./DeleteProductModal";
-import { addProductToCart } from "../services/cartsService";
+// import { addProductToCart } from "../services/cartsService";
 import { successMsg } from "../services/feedbacks";
 
 interface ProductsProps {}
@@ -19,7 +19,7 @@ const Products: FunctionComponent<ProductsProps> = () => {
   let [openAddModal, setOpenAddModal] = useState<boolean>(false);
   let [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
   let [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  let [productId, setProductId] = useState<number>(0);
+  let [productId, setProductId] = useState<string>("");
   let [productsChange, setProductsChange] = useState<boolean>(false);
 
   useEffect(() => {
@@ -68,11 +68,11 @@ const Products: FunctionComponent<ProductsProps> = () => {
                   <button
                     className="btn btn-primary"
                     onClick={() => {
-                      addProductToCart(product.id as number)
-                        .then(() =>
-                          successMsg(`Product ${product.name} added to cart`)
-                        )
-                        .catch((err) => console.log(err));
+                      // addProductToCart(product.id as string)
+                      //   .then(() =>
+                      //     successMsg(`Product ${product.name} added to cart`)
+                      //   )
+                      //   .catch((err) => console.log(err));
                     }}
                   >
                     <i className="fa-solid fa-cart-plus"></i> Add to cart
@@ -83,7 +83,7 @@ const Products: FunctionComponent<ProductsProps> = () => {
                         className="btn btn-warning mx-2"
                         onClick={() => {
                           setOpenUpdateModal(true);
-                          setProductId(product.id as number);
+                          setProductId(product.id as string);
                         }}
                       >
                         <i className="fa-solid fa-pen-to-square"></i>
@@ -92,7 +92,7 @@ const Products: FunctionComponent<ProductsProps> = () => {
                         className="btn btn-danger"
                         onClick={() => {
                           setOpenDeleteModal(true);
-                          setProductId(product.id as number);
+                          setProductId(product.id as string);
                         }}
                       >
                         <i className="fa-solid fa-trash"></i>

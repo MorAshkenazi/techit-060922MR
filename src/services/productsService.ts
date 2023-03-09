@@ -9,7 +9,7 @@ export function getProducts() {
 }
 
 // get specific product
-export function getProductById(id: number) {
+export function getProductById(id: string) {
   return axios.get(`${api}/${id}`);
 }
 
@@ -24,6 +24,6 @@ export function updateProduct(newProduct: Product) {
 }
 
 // delete product
-export function deleteProduct(id: number) {
+export function deleteProduct(id: string) {
   return axios.delete(`${api}/${id}`);
 }

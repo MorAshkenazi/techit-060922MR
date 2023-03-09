@@ -2,7 +2,7 @@ import { FunctionComponent, SetStateAction, useEffect, useState } from "react";
 import Product from "../interfaces/Product";
 import axios from "axios";
 import Navbar from "./Navbar";
-import { getProductsInCart } from "../services/cartsService";
+// import { getProductsInCart } from "../services/cartsService";
 
 interface CartProps {}
 
@@ -11,14 +11,14 @@ const Cart: FunctionComponent<CartProps> = () => {
 
   useEffect(() => {
     // getProducts2();
-    (async () => {
-      try {
-        const products = await getProductsInCart();
-        setProducts(products);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     const products = await getProductsInCart();
+    //     setProducts(products);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // })();
   }, []);
 
   let getProducts2 = async () => {

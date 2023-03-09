@@ -7,7 +7,7 @@ import { successMsg } from "../services/feedbacks";
 
 interface UpdateProductProps {
   onHide: Function;
-  productId: number;
+  productId: string;
   refresh: Function;
 }
 

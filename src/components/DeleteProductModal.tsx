@@ -6,7 +6,7 @@ import { successMsg } from "../services/feedbacks";
 interface DeleteProductModalProps {
   show: boolean;
   onHide: Function;
-  productId: number;
+  productId: string;
   refresh: Function;
 }
 

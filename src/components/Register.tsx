@@ -37,7 +37,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
     },
   });
 
-  let createUserCart = (userId: number) => {
+  let createUserCart = (userId: string) => {
     createCart(userId).catch((err) => console.log(err));
   };
   return (

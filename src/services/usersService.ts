@@ -1,13 +1,11 @@
 import axios from "axios";
 import User from "../interfaces/User";
 
-const api: string = process.env.REACT_APP_API + "/users" || "";
+const api: string = process.env.REACT_APP_API || "";
 
 // check user - login
 export function checkUser(userToCheck: User) {
-  return axios.get(
-    `${api}?email=${userToCheck.email}&password=${userToCheck.password}`
-  );
+  return axios.post(`${api}/login`, userToCheck);
 }
 
 // add user - register

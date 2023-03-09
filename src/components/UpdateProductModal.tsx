@@ -5,7 +5,7 @@ import UpdateProduct from "./UpdateProduct";
 interface UpdateProductModalProps {
   show: boolean;
   onHide: Function;
-  productId: number;
+  productId: string;
   refresh: Function;
 }
 
