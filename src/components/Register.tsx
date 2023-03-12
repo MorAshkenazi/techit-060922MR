@@ -5,7 +5,6 @@ import * as yup from "yup";
 import User from "../interfaces/User";
 import { addUser } from "../services/usersService";
 import { successMsg } from "../services/feedbacks";
-import { createCart } from "../services/cartsService";
 
 interface RegisterProps {}
 

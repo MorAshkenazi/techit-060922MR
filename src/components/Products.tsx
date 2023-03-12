@@ -8,6 +8,7 @@ import DeleteProductModal from "./DeleteProductModal";
 // import { addProductToCart } from "../services/cartsService";
 import { successMsg } from "../services/feedbacks";
 import { getIsAdmin } from "../services/usersService";
+import { addProductToCart } from "../services/cartsService";
 
 interface ProductsProps {}
 
@@ -66,11 +67,11 @@ const Products: FunctionComponent<ProductsProps> = () => {
                   <button
                     className="btn btn-primary"
                     onClick={() => {
-                      // addProductToCart(product.id as string)
-                      //   .then(() =>
-                      //     successMsg(`Product ${product.name} added to cart`)
-                      //   )
-                      //   .catch((err) => console.log(err));
+                      addProductToCart(product)
+                        .then(() =>
+                          successMsg(`Product ${product.name} added to cart`)
+                        )
+                        .catch((err) => console.log(err));
                     }}
                   >
                     <i className="fa-solid fa-cart-plus"></i> Add to cart

@@ -1,8 +1,7 @@
 import { FunctionComponent, SetStateAction, useEffect, useState } from "react";
 import Product from "../interfaces/Product";
-import axios from "axios";
 import Navbar from "./Navbar";
-// import { getProductsInCart } from "../services/cartsService";
+import { getProductsInCart } from "../services/cartsService";
 
 interface CartProps {}
 
@@ -10,73 +9,11 @@ const Cart: FunctionComponent<CartProps> = () => {
   let [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // getProducts2();
-    // (async () => {
-    //   try {
-    //     const products = await getProductsInCart();
-    //     setProducts(products);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // })();
+    getProductsInCart()
+      .then((res) => setProducts(res.data))
+      .catch((error) => console.log(error));
   }, []);
 
-  let getProducts2 = async () => {
-    try {
-      // get userId from sessionStorage
-      let userId: number = JSON.parse(
-        sessionStorage.getItem("userData") as string
-      ).userId;
-
-      // get user cart (response object) according to his userId
-      let cartRes = await axios.get(
-        `${process.env.REACT_APP_API}/carts?userId=${userId}`
-      );
-      // get user cart (products numbers array)
-      let productsIds: number[] = cartRes.data[0].products;
-
-      // wait for all products promises
-      const promiseArr = await Promise.all(
-        productsIds.map((id) =>
-          axios.get(`${process.env.REACT_APP_API}/products/${id}`)
-        )
-      );
-
-      // get array of data only
-      let products: Product[] = promiseArr.map((res) => res.data);
-      console.log(products);
-
-      setProducts(products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  let getProducts = async () => {
-    try {
-      // get userId from sessionStorage
-      let userId: number = JSON.parse(
-        sessionStorage.getItem("userData") as string
-      ).userId;
-
-      let products: Product[] = [];
-      // get user cart (response object) according to his userId
-      let cartRes = await axios.get(
-        `${process.env.REACT_APP_API}/carts?userId=${userId}`
-      );
-      // get user cart (products numbers array)
-      let productsIds: number[] = cartRes.data[0].products;
-      for (let id of productsIds) {
-        let productRes = await axios.get(
-          `http://localhost:8000/products/${id}`
-        );
-        products.push(productRes.data);
-      }
-      setProducts(products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <>
       <Navbar />
@@ -94,7 +31,7 @@ const Cart: FunctionComponent<CartProps> = () => {
             </thead>
             <tbody>
               {products.map((product: Product) => (
-                <tr key={product._id}>
+                <tr key={product.name}>
                   <td>{product.name}</td>
                   <td>{product.category}</td>
                   <td>{product.price}</td>
